@@ -13,7 +13,7 @@ array[numbers] of int: Hs;  % heights of the small pieces
 
 % TODO: assert the input data are all valid
 % 0.2 sum(Wi * Hi) <= W * H
-% constraint sum(i in numbers) (Ws[i] * Hs[i]) <= W * H;
+constraint sum(i in numbers) (Ws[i] * Hs[i]) <= W * H;
 
 %% Variables
 % coordinates of left-bottom corners 
@@ -34,7 +34,8 @@ constraint forall(i in numbers) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
 %                                              Ys[i] >= Ys[j] + Hs[j] \/ Ys[i] + Hs[i] <= Ys[j]);
 
 % 1.3.1 Global Constraint version  TODO: This one is wrong
-% constraint disjunctive(Xs, Ws) \/ disjunctive(Ys, Hs);
+constraint disjunctive(Xs, Ws);
+constraint disjunctive(Ys, Hs);
 
 % 1.4 Symmetry
 %constraint lex_lesseq();
@@ -48,6 +49,7 @@ constraint forall(i in numbers) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
 
 % 2.1 Global constraint version
 constraint cumulative(Xs, Ws, Hs, H) /\ cumulative(Ys, Hs, Ws, W);
+constraint diffn(Xs,Ys,Ws,Hs);
 
 % 4. Search
 ann: search_ann;

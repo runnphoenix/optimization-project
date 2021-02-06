@@ -23,11 +23,11 @@ for file_name in list_of_files:
 			
 	# write to dzn file
 	FO = open(file_name.replace('txt', 'dzn'), 'w') 
-	FO.write("w = %d;\n" % w)
-	FO.write("h = %d;\n" % h)
-	FO.write("n = %d;\n" % n)
-	FO.write("wi = %s;\n" % wi)
-	FO.write("hi = %s;" % hi)
+	FO.write("W = %d;\n" % w)
+	FO.write("H = %d;\n" % h)
+	FO.write("N = %d;\n" % n)
+	FO.write("Ws = %s;\n" % wi)
+	FO.write("Hs = %s;" % hi)
 	
 	FI.close()
 	FO.close()
