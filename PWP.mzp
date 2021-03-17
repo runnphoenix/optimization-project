@@ -1,16 +1,16 @@
 {
-    "builtinSolverConfigs": [
-    ],
     "openFiles": [
         "PWP.mzn"
     ],
     "openTab": 0,
     "projectFiles": [
+        "24x24.dzn",
+        "36x36.dzn",
+        "40x40.dzn",
+        "9x12.dzn",
         "PWP.mzn"
     ],
-    "projectSolverConfigs": [
-    ],
     "selectedBuiltinConfigId": "org.gecode.gecode",
-    "selectedBuiltinConfigVersion": "6.1.1",
-    "version": 105
+    "selectedBuiltinConfigVersion": "6.3.0",
+    "version": 106
 }
