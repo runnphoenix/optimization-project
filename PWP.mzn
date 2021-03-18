@@ -47,3 +47,11 @@ solve
   :: search_ann
   :: restart_luby(25)
   satisfy;
+  
+output [
+  show_int(2,W), " ", show_int(2,H), "\n",
+  show_int(2,N), "\n"];
+output [
+  show_int(2,Ws[i]) ++ " " ++ show_int(2,Hs[i]) ++ " " ++ show_int(2,Xs[i]) ++ " " ++ show_int(2,Ys[i]) ++ "\n" |
+  i in 1..N
+];
