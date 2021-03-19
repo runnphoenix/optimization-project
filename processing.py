@@ -7,7 +7,7 @@ import time
 
 process_time = {}
 
-list_of_files = glob.glob('./*.dzn') 
+list_of_files = sorted(glob.glob('./*.dzn'))
 
 for data_file in list_of_files:
 	print("Processing " + data_file + "...")
@@ -15,12 +15,11 @@ for data_file in list_of_files:
 	result_file = file_name + '-out.txt'
 	
 	start_time = time.time()
-	process = os.popen('minizinc ' + '-o ' + result_file + ' -t ' + '60000 ' + 'PWP.mzn ' + data_file)
+	process = os.popen('minizinc ' + '-o ' + result_file + ' -t ' + '120000 ' + '-p ' + '4 ' + 'PWP.mzn ' + data_file)
 	response = process.read()
 	end_time = time.time()
 	process_time[file_name] = end_time - start_time
 	
-	print(response)
 	process.close()
 	
 	print(process_time)
