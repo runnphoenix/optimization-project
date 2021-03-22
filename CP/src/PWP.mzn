@@ -25,6 +25,8 @@ constraint forall(i in 1..N) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
 
 % All small pieces whose height > H/2 must be placed horizontally
 %constraint alldifferent( [Xs[i] | i in 1..N where Hs[i] > H/2] );
+constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] > H/2) (
+            Xs[j] - Xs[i] >= min(Ws[i],Ws[j]));% \/ Xs[j] - Xs[i] >= min(Ws[i],Ws[j]) );
 
 % 2. Implied Constraints
 % constraint forall(x in 0..W) (
