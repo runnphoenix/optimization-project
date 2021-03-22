@@ -49,13 +49,23 @@ def solve_instance(W, H, N, Ws, Hs, file_name):
 	
 	# no overlap
 	disjunctive_c = [Or(Xs[i] >= Xs[j] + Ws[j], Xs[i] + Ws[i] <= Xs[j], Ys[i] >= Ys[j] + Hs[j], Ys[i] + Hs[i] <= Ys[j]) 
-						for i in range(N) for j in range(N) if i != j]
+						for i in range(N) for j in range(i+1,N)]# if i != j]
 	
+	# All small pieces whose height > H/2 must be placed horizontally
+	# constraint alldifferent( [Xs[i] | i in 1..N where Hs[i] > H/2] );
+	# constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] > H/2) (
+	#	   Xs[j] - Xs[i] >= min(Ws[i],Ws[j]));% \/ Xs[j] - Xs[i] >= min(Ws[i],Ws[j]) );
+	horizon_c = [(Xs[i] != Xs[j]) for i in range(N) for j in range(i+1, N) if (Hs[i] > H//2 and Hs[j] > H//2)]
+	horizon_c2 = [Or(Xs[i]-Xs[j] >= min(Ws[i],Ws[j]), Xs[j]-Xs[i] >= min(Ws[i],Ws[j])) 
+		for i in range(N) for j in range(i+1,N) if(Hs[i] > H//2 and Hs[j] > H//2)]
+	horizon_c3 = [(Xs[i]-Xs[j] >= min(Ws[i],Ws[j])) 
+		for i in range(N) for j in range(i+1,N) if(Hs[i] > H//2 and Hs[j] > H//2)]
+
 	# implied constraint
 	implied_X_c = [ Sum([ If(And(Xs[i]<=x, x<Xs[i]+Ws[i]), Hs[i], 0) for i in range(N) ]) <= H for x in range(W)]
 	implied_Y_c = [ Sum([ If(And(Ys[j]<=y, y<Ys[j]+Hs[j]), Ws[j], 0) for j in range(N) ]) <= W for y in range(H)]
 	
-	PWP_c = Xi_c + Yi_c + X_W_c + Y_H_c + disjunctive_c + implied_X_c + implied_Y_c
+	PWP_c = Xi_c + Yi_c + X_W_c + Y_H_c + disjunctive_c + implied_X_c + implied_Y_c + horizon_c3
 	
 	# solve
 	s = Solver()
@@ -73,7 +83,6 @@ def main():
 	process_time = {}
 	
 	input_files = sorted(glob.glob("../../instances/*.txt"))
-	input_files = input_files[30:]
 	for file_name in input_files:
 		W,H,N,Ws,Hs = read_file(file_name)	
 		
