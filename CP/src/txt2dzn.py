@@ -2,8 +2,9 @@
 
 import glob
 
-def sort_key(line): # sort array according to the product of elements
-	return line[0] * line[1]
+def sort_key(line): 
+	#return line[0] * line[1] # sort array according to the product of elements
+	return line[1] # sort array according to the height of each rectangle
 	
 def read_file(file_name):
 	with open(file_name, 'r') as FI:
@@ -20,13 +21,17 @@ def read_file(file_name):
 			wh = [int(e) for e in line.split()] # a list
 			size_lines.append(wh)
 
-	size_lines.sort(key=sort_key, reverse=True)
+	#size_lines.sort(key=sort_key, reverse=True)
 
 	ws = []
 	hs = []
 	for line in size_lines:
 		ws.append(line[0])
 		hs.append(line[1])
+		
+	# last first of original dimensions
+	ws = ws[::-1]
+	hs = hs[::-1]
 	
 	return w,h,n,ws,hs
 	

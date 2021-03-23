@@ -12,10 +12,6 @@ array[1..N] of var 0..(H-1): Ys;
 % Assert the input data are all valid: sum(Wi * Hi) <= W * H
 constraint assert( sum(i in 1..N) (Ws[i] * Hs[i]) <= W * H, "Total area of all small pieces should not be bigger than the big one." );
 
-% Symmetry breaking
-%constraint lex_lesseq(Xs, reverse(Xs));
-%constraint lex_lesseq(Ys, reverse(Ys));
-
 % 1. Main problem constriants
 % Xi + Wi <= W, Yi + Hi <= H
 constraint forall(i in 1..N) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
@@ -23,14 +19,17 @@ constraint forall(i in 1..N) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
 % constraint forall(i,j in 1..N where i<j) (Xs[i] >= Xs[j] + Ws[j] \/ Xs[i] + Ws[i] <= Xs[j] \/
 %                                              Ys[i] >= Ys[j] + Hs[j] \/ Ys[i] + Hs[i] <= Ys[j]);
 
+% auxilliary constraints
 % All small pieces whose height > H/2 must be placed horizontally
 %constraint alldifferent( [Xs[i] | i in 1..N where Hs[i] > H/2] );
 constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] > H/2) (
             Xs[j] - Xs[i] >= min(Ws[i],Ws[j]));% \/ Xs[j] - Xs[i] >= min(Ws[i],Ws[j]) );
             
-% two small pieces which could form a column shoul have the same x coordinates
+% two small pieces which could form a column by two should have the same x coordinates
+% we also loose this constraint by letting them be placed side by side horizontally
 constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] + Hs[i] == H /\ Ws[i] == Ws[j]) (
-	Xs[i] == Xs[j]);
+	%Xs[j] - Xs[i] <= Ws[i]);
+	Xs[j] == Xs[i] \/ Xs[j] - Xs[i] == Ws[i]);
 
 % 2. Implied Constraints
 % constraint forall(x in 0..W) (
@@ -56,9 +55,8 @@ solve
 %   :: search_ann
   :: seq_search([
              int_search(Xs, input_order, indomain_min),
-             int_search(Ys, input_order, indomain_min)])
-%   :: restart_luby(25)
-%   :: restart_linear(100)
+             int_search(Ys, dom_w_deg, indomain_random)])
+    :: restart_luby(100)
   satisfy;
   
 output [
