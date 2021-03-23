@@ -27,6 +27,10 @@ constraint forall(i in 1..N) (Xs[i] + Ws[i] <= W /\ Ys[i] + Hs[i] <= H);
 %constraint alldifferent( [Xs[i] | i in 1..N where Hs[i] > H/2] );
 constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] > H/2) (
             Xs[j] - Xs[i] >= min(Ws[i],Ws[j]));% \/ Xs[j] - Xs[i] >= min(Ws[i],Ws[j]) );
+            
+% two small pieces which could form a column shoul have the same x coordinates
+constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] + Hs[i] == H /\ Ws[i] == Ws[j]) (
+	Xs[i] == Xs[j]);
 
 % 2. Implied Constraints
 % constraint forall(x in 0..W) (

@@ -5,7 +5,10 @@ import glob
 from datetime import datetime
 import time
 
-def solve_one_instance(data_file, result_file):
+def solve_one_instance(data_file, process_time):
+	file_name = data_file.split('/')[-1][:-4]
+	result_file = '../out/' + file_name + '-out.txt'
+	
 	with open(result_file, 'w+') as rf: # 'w+' for rewriting to all files
 		contents = rf.readlines()
 		# tell if this file already contains the result, only works when open a file with 'r' option
@@ -25,11 +28,7 @@ def main():
 	list_of_files = sorted(glob.glob('../../instances/*.dzn'))
 	for data_file in list_of_files:
 		print("Processing " + data_file + "...")
-		
-		file_name = data_file.split('/')[-1][:-4]
-		result_file = '../out/' + file_name + '-out.txt'
-		
-		solve_one_instance(data_file, result_file)
+		solve_one_instance(data_file, process_time)
 	
-if __name__ = '__main__':
+if __name__ == '__main__':
 	main()

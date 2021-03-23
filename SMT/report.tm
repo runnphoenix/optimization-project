@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.19>
 
 <style|<tuple|generic|chinese>>
 
@@ -16,8 +16,8 @@
   We first read in <em|W, H, N, Ws> and <em|Hs> respectivaly as the width of
   the whole paper, the height of the whole paper, the number of the small
   pieces, the widths of the small pieces and the heights of the small pieces.
-  We then created two decision variables <em|Xs> and <em|Ys>, which represent
-  the coordinates of the left-bottom corner of all the small pieces.
+  We then created two variables <em|Xs> and <em|Ys>, which represent the
+  coordinates of the left-bottom corner of all the small pieces.
 
   <subsubsection|The small pieces should not exceed the border of the whole
   paper>
@@ -120,7 +120,7 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|1.4|2>>
+    <associate|auto-10|<tuple|1.4|1>>
     <associate|auto-11|<tuple|1.5|2>>
     <associate|auto-12|<tuple|1.6|2>>
     <associate|auto-13|<tuple|2|2>>
