@@ -5,6 +5,9 @@ import os
 import glob
 import time
 
+def sort_key(line): 
+	return line[0] * line[1] # sort array according to the product of elements
+
 def read_file(file_name):
 	with open(file_name) as F:
 		line1 = F.readline()
@@ -14,13 +17,21 @@ def read_file(file_name):
 		line2 = F.readline()
 		N = int(line2)
 		
-		Ws = []
-		Hs = []
+		size_lines = []
 		for _ in range(N):
 			line = F.readline()
-			wh = line.split()
-			Ws.append(int(wh[0]))
-			Hs.append(int(wh[1]))
+			size_lines.append([int(x) for x in line.split()])
+		#size_lines.sort(key=sort_key, reverse=True)
+		
+		Ws = []
+		Hs = []
+		for i in range(N):
+			Ws.append(size_lines[i][0])
+			Hs.append(size_lines[i][1])
+			
+		Ws = Ws[::-1]
+		Hs = Hs[::-1]
+
 	return W,H,N,Ws,Hs
 	
 def write_to_file(file_name, W, H, N, Ws, Hs, Xs, Ys):
@@ -48,24 +59,21 @@ def solve_instance(W, H, N, Ws, Hs, file_name):
 	Y_H_c = [(Ys[i] + Hs[i] <= H) for i in range(N)]
 	
 	# no overlap
-	disjunctive_c = [Or(Xs[i] >= Xs[j] + Ws[j], Xs[i] + Ws[i] <= Xs[j], Ys[i] >= Ys[j] + Hs[j], Ys[i] + Hs[i] <= Ys[j]) 
-						for i in range(N) for j in range(i+1,N)]# if i != j]
+	overlap_c = [Or(Xs[i] >= Xs[j] + Ws[j], Xs[i] + Ws[i] <= Xs[j], Ys[i] >= Ys[j] + Hs[j], Ys[i] + Hs[i] <= Ys[j]) 
+						for i in range(N) for j in range(i+1,N)]
 	
 	# All small pieces whose height > H/2 must be placed horizontally
-	# constraint alldifferent( [Xs[i] | i in 1..N where Hs[i] > H/2] );
-	# constraint forall(i in 1..N, j in i+1..N where Hs[i] > H/2 /\ Hs[j] > H/2) (
-	#	   Xs[j] - Xs[i] >= min(Ws[i],Ws[j]));% \/ Xs[j] - Xs[i] >= min(Ws[i],Ws[j]) );
-	horizon_c = [(Xs[i] != Xs[j]) for i in range(N) for j in range(i+1, N) if (Hs[i] > H//2 and Hs[j] > H//2)]
-	horizon_c2 = [Or(Xs[i]-Xs[j] >= min(Ws[i],Ws[j]), Xs[j]-Xs[i] >= min(Ws[i],Ws[j])) 
+	horizon_c = [(Xs[j]-Xs[i] >= min(Ws[i],Ws[j])) 
 		for i in range(N) for j in range(i+1,N) if(Hs[i] > H//2 and Hs[j] > H//2)]
-	horizon_c3 = [(Xs[i]-Xs[j] >= min(Ws[i],Ws[j])) 
-		for i in range(N) for j in range(i+1,N) if(Hs[i] > H//2 and Hs[j] > H//2)]
+	# Two pieces which could form a column should be encouraged to do so
+	vertical_c = [Or(Xs[j] - Xs[i] == Ws[i], Xs[j] == Xs[i])
+		for i in range(N) for j in range(i+1,N) if(Hs[i]>H//2 and Hs[i]+Hs[j]==H and Ws[i]==Ws[j])]
 
 	# implied constraint
 	implied_X_c = [ Sum([ If(And(Xs[i]<=x, x<Xs[i]+Ws[i]), Hs[i], 0) for i in range(N) ]) <= H for x in range(W)]
 	implied_Y_c = [ Sum([ If(And(Ys[j]<=y, y<Ys[j]+Hs[j]), Ws[j], 0) for j in range(N) ]) <= W for y in range(H)]
 	
-	PWP_c = Xi_c + Yi_c + X_W_c + Y_H_c + disjunctive_c + implied_X_c + implied_Y_c + horizon_c3
+	PWP_c = Xi_c + Yi_c + X_W_c + Y_H_c + overlap_c + horizon_c + vertical_c# + implied_X_c + implied_Y_c
 	
 	# solve
 	s = Solver()
@@ -77,24 +85,32 @@ def solve_instance(W, H, N, Ws, Hs, file_name):
 		Xs_evaluated = [m.evaluate(Xs[i]) for i in range(N)]
 		Ys_evaluated = [m.evaluate(Ys[i]) for i in range(N)]
 		
-	return Xs_evaluated, Ys_evaluated
+		return Xs_evaluated, Ys_evaluated
+	return None, None
 
 def main():
 	process_time = {}
 	
 	input_files = sorted(glob.glob("../../instances/*.txt"))
-	for file_name in input_files:
-		W,H,N,Ws,Hs = read_file(file_name)	
+	for i in range(2):
+		last = input_files.pop()
+		input_files.insert(0, last)
 		
+	input_files = input_files[0:]
+	for file_name in input_files:
+		W,H,N,Ws,Hs = read_file(file_name)
 		print('\nProcessing ' + file_name)
+		
 		start_time = time.time()
 		Xs_evaluated, Ys_evaluated = solve_instance(W,H,N,Ws,Hs,file_name)
 		end_time = time.time() # time used for each problem
 		process_time[file_name.split('/')[-1][:-4]] = end_time - start_time
-		
-		write_to_file(file_name, W, H, N, Ws, Hs, Xs_evaluated, Ys_evaluated)
-		print(process_time)
-		
+		if(Xs_evaluated != None):
+			write_to_file(file_name, W, H, N, Ws, Hs, Xs_evaluated, Ys_evaluated)
+		print(end_time - start_time)
+	print(process_time)
+
+	
 if __name__ == '__main__':
 	main()
 	

@@ -108,10 +108,10 @@
   easier as the number of small pieces are smaller and we are just forming
   new rectangles. But we should also consider that they couldn't exceed the
   borders of the whole sheet of paper, also if they can't perfectly fit the
-  width or length of the whole papaer, we should consider leaving enough
-  space for other small rectangels. We should also consider the direction
-  they grow, for example, two pieces of size 3x4, they could form a bigger
-  piece with size 6x4 or 3x8.
+  width or length of the whole paper, we should consider leaving enough space
+  for other small rectangels. We should also consider the direction they
+  grow, for example, two pieces of size 3x4, they could form a bigger piece
+  with size 6x4 or 3x8.
 
   <section|Other remarks>
 
@@ -135,7 +135,7 @@
   Specifically, we are transforming a problem with size
   <math|w<rsub|1>\<times\>*h> into a problem <math|w<rsub|2>*\<times\>h>,
   where <math|w<rsub|2>*\<less\>w<rsub|1>>. Suppose we have two rectangles
-  with the same witdh, the height of one rectangle is bigger than 0.5 * H,
+  with the same width, the height of one rectangle is bigger than 0.5 * H,
   and the sum of their heights are H, then we try to make them a column.\ 
 
   The problem with this constraint is the new and less complexity problem
@@ -184,11 +184,10 @@
     <associate|auto-11|<tuple|1.6|2>>
     <associate|auto-12|<tuple|2|2>>
     <associate|auto-13|<tuple|2.1|2>>
-    <associate|auto-14|<tuple|2.1.1|3>>
-    <associate|auto-15|<tuple|2.1.2|?>>
-    <associate|auto-16|<tuple|2.2|?>>
-    <associate|auto-17|<tuple|3|?>>
-    <associate|auto-18|<tuple|3|?>>
+    <associate|auto-14|<tuple|2.1.1|2>>
+    <associate|auto-15|<tuple|2.1.2|2>>
+    <associate|auto-16|<tuple|2.2|3>>
+    <associate|auto-17|<tuple|3|3>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1.2|1>>
@@ -196,7 +195,7 @@
     <associate|auto-6|<tuple|1.3|1>>
     <associate|auto-7|<tuple|1.3.1|1>>
     <associate|auto-8|<tuple|1.3.2|1>>
-    <associate|auto-9|<tuple|1.4|2>>
+    <associate|auto-9|<tuple|1.4|1>>
   </collection>
 </references>
 
@@ -220,46 +219,58 @@
       between all the small pieces <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
-      <with|par-left|<quote|2tab>|1.1.3<space|2spc>The small pieces whose
-      heights <with|font-shape|<quote|italic>|Hs[i] \<gtr\> 0.5 * H> could
-      only be placed horizontally <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
-
       <with|par-left|<quote|1tab>|1.2<space|2spc>Implied constraints
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
+      <no-break><pageref|auto-5>>
 
       <with|par-left|<quote|1tab>|1.3<space|2spc>Global constraints
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
+      <no-break><pageref|auto-6>>
 
       <with|par-left|<quote|2tab>|1.3.1<space|2spc>Main constraints
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-7>>
 
       <with|par-left|<quote|2tab>|1.3.2<space|2spc>Implied constraints
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|1.4<space|2spc>The best way of searching
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-9>>
 
       <with|par-left|<quote|1tab>|1.5<space|2spc>Rotation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|1tab>|1.6<space|2spc>Multiple pieces of the same
       dimension <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-11>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Other
       remarks> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13><vspace|0.5fn>
+      <no-break><pageref|auto-12><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|2.1<space|2spc>Auxilliary constraints
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-13>>
+
+      <with|par-left|<quote|2tab>|2.1.1<space|2spc>The small pieces whose
+      heights <with|font-shape|<quote|italic>|Hs[i] \<gtr\> 0.5 * H> could
+      only be placed horizontally <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14>>
+
+      <with|par-left|<quote|2tab>|2.1.2<space|2spc>Encouraging two suitable
+      rectangles to form a whole column <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-15>>
+
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Result verification
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-16>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>References>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14><vspace|0.5fn>
+      <no-break><pageref|auto-17><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
