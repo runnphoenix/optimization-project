@@ -4,10 +4,14 @@ from z3 import *
 import os
 import glob
 import time
+from numba import jit  
 
+@jit(nopython=True)
 def sort_key(line): 
 	return line[0] * line[1] # sort array according to the product of elements
 
+
+#read files 
 def read_file(file_name):
 	with open(file_name) as F:
 		line1 = F.readline()
@@ -33,7 +37,8 @@ def read_file(file_name):
 		Hs = Hs[::-1]
 
 	return W,H,N,Ws,Hs
-	
+
+
 def write_to_file(file_name, W, H, N, Ws, Hs, Xs, Ys):
 	file_name = file_name.split('/')[-1][:-4]
 	out_file_name = os.path.join('..' , 'out', file_name + '-out' + '.txt')
@@ -97,16 +102,16 @@ def main():
 		input_files.insert(0, last)
 		
 	input_files = input_files[0:]
-	for file_name in input_files:
+	for file_name in input_files: #read files from instance.txt
 		W,H,N,Ws,Hs = read_file(file_name)
 		print('\nProcessing ' + file_name)
 		
-		start_time = time.time()
+		start_time = time.time() #start timer 
 		Xs_evaluated, Ys_evaluated = solve_instance(W,H,N,Ws,Hs,file_name)
 		end_time = time.time() # time used for each problem
 		process_time[file_name.split('/')[-1][:-4]] = end_time - start_time
 		if(Xs_evaluated != None):
-			write_to_file(file_name, W, H, N, Ws, Hs, Xs_evaluated, Ys_evaluated)
+			write_to_file(file_name, W, H, N, Ws, Hs, Xs_evaluated, Ys_evaluated) #write the new values to file
 		print(end_time - start_time)
 	print(process_time)
 

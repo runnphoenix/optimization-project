@@ -1,4 +1,7 @@
 # Usage of source files
+## requireemnts.txt
+To download all necesasry libraries for the project
+pip install -r requirements.txt
 
 ## PWP-Z3.py
 This is a python script file which contains the Z3 model. Use `python3 PWP-Z3.py` or `./PWP-Z3.py` in terminal to run this file when in the directory of this file.

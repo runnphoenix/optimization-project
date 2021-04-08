@@ -2,6 +2,8 @@
 
 import numpy as np
 import sys
+from numba import jit  
+
 
 def get_test_file_location():
 	args = sys.argv
@@ -20,7 +22,8 @@ def print_array(map, row_sep=" "):  # print the colored array
 	n, m = map.shape
 	fmt_str = "\n".join([row_sep.join(["{}"]*m)]*n)
 	print(fmt_str.format(*map.ravel()))
-	
+
+
 def fill_sheet(test_file_path): # fill the sheet with corresponding digits
 	with open(test_file_path, 'r') as FI:
 		line1 = FI.readline()
