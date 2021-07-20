@@ -1,4 +1,4 @@
-<TeXmacs|1.99.19>
+<TeXmacs|1.99.18>
 
 <style|<tuple|generic|chinese>>
 
@@ -30,6 +30,11 @@
   upper borders of all the small pieces don't exceed the upper border of the
   whole paper.\ 
 
+  <with|math-level|1|<\equation*>
+    constraint forall<around*|(|i in 1<text|..>N|)>
+    <around*|(|X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>\<leqslant\>W\<wedge\>Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|i|]>\<leqslant\>H|)>
+  </equation*>>
+
   <subsubsection|There should be no overlap between all the small pieces>
 
   We used <em|forall> function to make sure that all the small pieces don't
@@ -39,6 +44,24 @@
   We also used <em|assert> to make sure that the total size of all the small
   pieces are not bigger than the size of the whole paper.
 
+  <\equation*>
+    <with|math-level|1|constraint forall <around*|(|i,j in 1.<text|.>N where
+    i\<less\>j|)><around*|(|X<rsub|s><around*|[|i|]>\<geqslant\>X<rsub|s><around*|[|j|]>+W<rsub|s><around*|[|j|]>\<vee\>X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>\<leqslant\>X<rsub|s><around*|[|j|]>\<vee\>Y<rsub|s><around*|[|i|]>\<geqslant\>Y<rsub|s><around*|[|j|]>+H<rsub|s><around*|[|j|]>\<vee\>Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|i|]>\<leqslant\>Y<rsub|s><around*|[|j|]>|)>>
+  </equation*>
+
+  <\with|math-level|2>
+    <\with|math-level|1>
+      <\with|math-level|0>
+        <with|math-level|0|<\equation*>
+          <with|math-level|1|constraint assert<around*|(|sum<around*|(|i in
+          1<text|.>.N|)> <around*|(|W<rsub|s><around*|[|i|]>*<text|*>H<rsub|s><around*|[|i|)>\<leqslant\>W<text|*>H,<rprime|''>Sum
+          area of small rectangles\<leqslant\>total
+          area.<rprime|''>|\<nobracket\>>|)>>
+        </equation*>>
+      </with>
+    </with>
+  </with>
+
   <subsection|Implied constraints>
 
   Take a vertical line for instance, the total heights of all the traversed
@@ -46,11 +69,27 @@
   vertical lines. For the CP problem we use <em|sum> and <em|forall> for
   these two requirements respectively.\ 
 
+  <with|math-level|1|<\equation*>
+    constraint forall <around*|(|x in 0<text|.>.W|)>
+    <around*|(|sum<around*|(|i in 1.<text|.>N where
+    X<rsub|s><around*|[|i|]>\<leqslant\>x\<wedge\>x\<less\>X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>|)><around*|(|H<rsub|s><around*|[|i|]>|)>\<leqslant\>H|)>
+  </equation*>>
+
+  <with|math-level|1|<\equation*>
+    constraint forall <around*|(|y in 0<text|.>.H|)>
+    <around*|(|sum<around*|(|i in 1.<text|.>N where
+    Y<rsub|s><around*|[|i|]>\<leqslant\>y\<wedge\>y\<less\>Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|i|]>|)><around*|(|W<rsub|s><around*|[|i|]>|)>\<leqslant\>W|)>
+  </equation*>>
+
   <subsection|Global constraints>
 
   <subsubsection|Main constraints>
 
   We used <em|diffn> in Minizinc to make sure all small pieces don't overlap.
+
+  <with|math-level|1|<\equation*>
+    constraint diffn<around*|(|X<rsub|s>,Y<rsub|s>,W<rsub|s>,H<rsub|s>|)>
+  </equation*>>
 
   <subsubsection|Implied constraints>
 
@@ -60,6 +99,14 @@
   small piece as the starting time of a task, the width or height as the
   duration of the task, the height or width as the resource requirement, and
   <math|H> or <math|W> as the capacity.
+
+  <with|math-level|1|<\equation*>
+    constraint cumulative<around*|(|X<rsub|s>,W<rsub|s>,H<rsub|s>,H|)>
+  </equation*>>
+
+  <with|math-level|1|<\equation*>
+    constraint cumulative<around*|(|Y<rsub|s>,H<rsub|s>,W<rsub|s>,W|)>
+  </equation*>>
 
   <subsection|The best way of searching>
 
@@ -96,13 +143,19 @@
   together with <em|luby restart>. Finally all the instances could be solved
   within 5 minitues (193s for the worst case on our machine).
 
+  <\equation*>
+    <with|math-level|1|seq<text|_><rsub|>search<around*|(|<around*|[|int<text|_>search<around*|(|X<rsub|s>,input<text|_>order,indomain<text|_>min|)>,int<text|_>search<around*|(|Y<rsub|s>,dom<text|_>w<text|_>deg,indomain<text|_>random|)>|]>|)>>
+  </equation*>
+
+  <with|math-level|1|<\equation*>
+    restart<rsub|<text|_>>luby<around*|(|100|)>
+  </equation*>>
+
   <subsection|Rotation>
 
   We need to set a new bool variable <math|O<rsub|i>> to define if piece
   <math|i> is rotated. When <math|O<rsub|i>> is true, the width and height of
   piece <math|i> is exchanged. <code|>
-
-  TODO: which one of CP and SMT are easier to implement rotation?
 
   <subsection|Multiple pieces of the same dimension>
 
@@ -131,6 +184,11 @@
   <math|w<rsub|i>\<less\>w<rsub|j>>, then the minimum distance between them
   should be <math|w<rsub|i>>.
 
+  <\equation*>
+    <with|math-level|1|constriant forall <around*|(|i in 1.<text|.>N,j in
+    i+1.<text|.>N where H<rsub|s><around*|[|i|]>\<gtr\>H/2\<wedge\>H<rsub|s><around*|[|j|]>\<gtr\>H/2|)><around*|(|X<rsub|s><around*|[|j|]>-X<rsub|s><around*|[|i|]>\<geqslant\>min<around*|(|W<rsub|s><around*|[|i|]>,W<rsub|s><around*|[|j|]>|)>|)>>
+  </equation*>
+
   <subsubsection|Encouraging two suitable rectangles to form a whole column>
 
   The main idea behind this is that by forming whole columns, to some sense
@@ -146,6 +204,11 @@
   In our model we loosed this constraint by also allowing the two rectangles
   to be placed side by size horizontally. For this project it didn't cause
   unsatisfication but strictly speaking, this is not a robust constraint.
+
+  <\equation*>
+    <with|math-level|1|constraint forall<around*|(|i in 1.<text|.>N,j in
+    i+1.<text|.>N where H<rsub|s><around*|[|i|]>\<gtr\>H/2\<wedge\>H<rsub|s><around*|[|j|]>+H<rsub|s><around*|[|i|]>\<longequal\>H\<wedge\>W<rsub|s><around*|[|i|]>\<longequal\>W<rsub|s><around*|[|j|]>|)><around*|(|X<rsub|s><around*|[|j|]>\<longequal\>X<rsub|s><around*|[|i|]>\<vee\>X<rsub|s><around*|[|j|]>-X<rsub|s><around*|[|i|]>\<longequal\>W<rsub|s><around*|[|i|]>|)>>
+  </equation*>
 
   <subsection|Result verification>
 
@@ -191,10 +254,10 @@
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|1.5|2>>
     <associate|auto-11|<tuple|1.6|2>>
-    <associate|auto-12|<tuple|2|2>>
-    <associate|auto-13|<tuple|2.1|2>>
-    <associate|auto-14|<tuple|2.1.1|2>>
-    <associate|auto-15|<tuple|2.1.2|2>>
+    <associate|auto-12|<tuple|2|3>>
+    <associate|auto-13|<tuple|2.1|3>>
+    <associate|auto-14|<tuple|2.1.1|3>>
+    <associate|auto-15|<tuple|2.1.2|3>>
     <associate|auto-16|<tuple|2.2|3>>
     <associate|auto-17|<tuple|3|4>>
     <associate|auto-2|<tuple|1.1|1>>
@@ -203,8 +266,8 @@
     <associate|auto-5|<tuple|1.2|1>>
     <associate|auto-6|<tuple|1.3|1>>
     <associate|auto-7|<tuple|1.3.1|1>>
-    <associate|auto-8|<tuple|1.3.2|1>>
-    <associate|auto-9|<tuple|1.4|1>>
+    <associate|auto-8|<tuple|1.3.2|2>>
+    <associate|auto-9|<tuple|1.4|2>>
   </collection>
 </references>
 

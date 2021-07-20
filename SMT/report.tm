@@ -1,4 +1,4 @@
-<TeXmacs|1.99.19>
+<TeXmacs|1.99.18>
 
 <style|<tuple|generic|chinese>>
 
@@ -19,6 +19,16 @@
   We then created two variables <em|Xs> and <em|Ys>, which represent the
   coordinates of the left-bottom corner of all the small pieces.
 
+  <with|math-level|1|<\equation*>
+    X<rsub|s>=<around*|[|Int<around*|(|<rprime|''>X<math-up|><text|%>i<rprime|''><text|
+    % >i|)> for i in range<around*|(|N|)>|]>
+  </equation*>>
+
+  <\equation*>
+    <with|math-level|1|Y<rsub|s>=<around*|[|Int<around*|(|<rprime|''>Y<math-up|><text|%>i<rprime|''><text|
+    % >i|)> for i in range<around*|(|N|)>|]>>
+  </equation*>
+
   <subsubsection|The small pieces should not exceed the border of the whole
   paper>
 
@@ -28,11 +38,36 @@
   border of the whole paper, also the upper borders of the rectangles don't
   exceed the upper border of the whole paper.\ 
 
+  <\equation*>
+    <with|math-level|1|<around*|[|And<around*|(|0\<leqslant\>X<rsub|s><around*|[|i|]>,X<rsub|s><around*|[|i|]>\<less\>W|)>
+    for i in range<around*|(|N|)>|]>>
+  </equation*>
+
+  <with|math-level|1|<\equation*>
+    <around*|[|And<around*|(|0\<leqslant\>Y<rsub|s><around*|[|i|]>,Y<rsub|s><around*|[|i|]>\<less\>H|)>
+    for i in range<around*|(|N|)>|]>
+  </equation*>>
+
+  <with|math-level|1|<\equation*>
+    <around*|[|<around*|(|X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>\<leqslant\>W|)>
+    for i in range<around*|(|N|)>|]>
+  </equation*>>
+
+  <with|math-level|1|<\equation*>
+    <around*|[|<around*|(|Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|i|]>\<leqslant\>H|)>
+    for i in range<around*|(|N|)>|]>
+  </equation*>>
+
   <subsubsection|There should be no overlap between all the small pieces>
 
   We used <em|Or> and list comprehension to make sure that all the small
   pieces don't overlap. The hint here is that if two small pieces of paper
   don't overlap horizontally <strong|OR> vertically, then they don't overlap.\ 
+
+  <with|math-level|1|<\equation*>
+    <with|math-display|false|<around*|[|<with|math-level|2|<with|math-level|1|Or<around*|(|X<rsub|s><around*|[|i|]>\<geqslant\>X<rsub|s><around*|[|j|]>+W<rsub|s><around*|[|j|]>,X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>\<leqslant\>X<rsub|s><around*|[|j|]>,Y<rsub|s><around*|[|i|]>\<geqslant\>Y<rsub|s><around*|[|j|]>+H<rsub|s><around*|[|j|]>,Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|i|]>\<leqslant\>Y<rsub|s><around*|[|j|]>|)>for
+    i in range<around*|(|N|)> for j in range<around*|(|i+1,N|)>>>|]><with|math-display|true|>>
+  </equation*>>
 
   <subsection|Implied constraints>
 
@@ -41,9 +76,21 @@
   vertical lines. For the SMT problem we use <em|sum> and list comprehension
   for these two requirements respectively.\ 
 
+  <with|math-level|1|<\equation*>
+    <around*|[|Sum<around*|(|<around*|[|If<around*|(|And<around*|(|X<rsub|s><around*|[|i|]>\<leqslant\>x,x\<less\>X<rsub|s><around*|[|i|]>+W<rsub|s><around*|[|i|]>|)>,H<rsub|s><around*|[|i|]>,0|)>for
+    i in range<around*|(|N|)>|]>|)>\<leqslant\>H for x in
+    range<around*|(|W|)>|]>
+  </equation*>>
+
+  <\equation*>
+    <with|math-level|1|<around*|[|Sum<around*|(|<around*|[|If<around*|(|And<around*|(|Y<rsub|s><around*|[|j|]>\<leqslant\>y,y\<less\>Y<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|j|]>|)>,W<rsub|s><around*|[|j|]>,0|)>for
+    j in range<around*|(|N|)>|]>|)>\<leqslant\>W for y in
+    range<around*|(|H|)>|]>>
+  </equation*>
+
   <subsection|Global constraints>
 
-  Right now we don't use any global constraints.
+  We don't use any global constraints.
 
   <subsection|The best way of searching>
 
@@ -55,17 +102,15 @@
   39x39). At last we got rid of the two implied constraints and the model
   could gave all the results (the time consumed was about 1 minute for 37x37
   and 6 minutes for 39x39). That makes sense because the two implied
-  constraints are <em|nested list comprehension>, essentially it's a nested
-  <em|for> loop even though in <em|Python> list comprehension runs faster
-  than a naive <em|for> loop.
+  constraints are nested <em|<strong|<verbatim|<em|>>>list comprehension>,
+  essentially it's a nested <em|for> loop even though in <em|Python> list
+  comprehension runs faster than a naive <em|for> loop.
 
   <subsection|Rotation>
 
   We need to set a new bool variable <math|O<rsub|i>> to define if piece
   <math|i> is rotated. When <math|O<rsub|i>> is true, the width and height of
   piece <math|i> is exchanged. <code|>
-
-  TODO: which one of CP and SMT are easier to implement rotation?
 
   <subsection|Multiple pieces of the same dimension>
 
@@ -94,6 +139,13 @@
   <math|w<rsub|i>\<less\>w<rsub|j>>, then the minimum distance between them
   should be <math|w<rsub|i>>.
 
+  <\equation*>
+    <with|math-level|1|<around*|[|<around*|(||\<nobracket\>>X<rsub|s><around*|[|j|]>-X<rsub|s><around*|[|i|]>\<geqslant\>min<around*|(|W<rsub|s><around*|[|i|]>,W<rsub|s><around*|[|j|]>|)>|)>
+    for i in range<around*|(|N|)> for j in range<around*|(|i+1,N|)> if
+    <around*|(|H<rsub|s><around*|[|i|]>\<gtr\>H//2 and
+    H<rsub|s><around*|[|j|]>\<gtr\>H//2|)><text|]>>
+  </equation*>
+
   <subsubsection|Encouraging two suitable rectangles to form a whole column>
 
   The main idea behind this is that by forming whole columns, to some sense
@@ -110,6 +162,14 @@
   rectangles to be placed side by size horizontally. For this project it
   didn't cause unsatisfication but strictly speaking, this is not a robust
   constraint.
+
+  <\equation*>
+    <with|math-level|1|<around*|[|Or<around*|(|X<rsub|s><around*|[|j|]>-X<rsub|s><around*|[|i|]>\<longequal\>W<rsub|s><around*|[|i|]>,X<rsub|s><around*|[|j|]>\<longequal\>X<rsub|s><around*|[|i|]>|)>
+    for i in range<around*|(|N|)> for j in range<around*|(|i+1,N|)>
+    if<around*|(|H<rsub|s><around*|[|i|]>\<gtr\>H//2 and
+    H<rsub|s><around*|[|i|]>+H<rsub|s><around*|[|j|]>\<longequal\>H and
+    W<rsub|s><around*|[|i|]>\<longequal\>W<rsub|s>|[>j|]><text|)]>>
+  </equation*>
 
   <subsection|Result verification>
 
@@ -146,15 +206,15 @@
     <associate|auto-11|<tuple|2.1|2>>
     <associate|auto-12|<tuple|2.1.1|2>>
     <associate|auto-13|<tuple|2.1.2|2>>
-    <associate|auto-14|<tuple|2.2|2>>
+    <associate|auto-14|<tuple|2.2|3>>
     <associate|auto-15|<tuple|3|3>>
     <associate|auto-2|<tuple|1.1|1>>
     <associate|auto-3|<tuple|1.1.1|1>>
     <associate|auto-4|<tuple|1.1.2|1>>
     <associate|auto-5|<tuple|1.2|1>>
-    <associate|auto-6|<tuple|1.3|1>>
-    <associate|auto-7|<tuple|1.4|1>>
-    <associate|auto-8|<tuple|1.5|1>>
+    <associate|auto-6|<tuple|1.3|2>>
+    <associate|auto-7|<tuple|1.4|2>>
+    <associate|auto-8|<tuple|1.5|2>>
     <associate|auto-9|<tuple|1.6|2>>
   </collection>
 </references>
