@@ -2,7 +2,7 @@
 
 ## requirements.txt
 ### Instances' location
-There should be a folder named 'instances' which contains all the instances in the same directory of 'SMT'.
+There should be a folder named 'instances' which contains all the instances in the root directory of this project.
 ### libraties
 To download all necesasry libraries for the project
 `pip install -r requirements.txt`
