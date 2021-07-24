@@ -38,8 +38,16 @@ def fill_sheet(test_file_path):
 		for i in range(n):
 			line = FI.readline()
 			piece = line.split()
-			wi = int(piece[0])
-			hi = int(piece[1])
+			if len(piece) == 5:
+				if int(piece[4]) == 0:
+					wi = int(piece[0])
+					hi = int(piece[1])
+				else:
+					wi = int(piece[1])
+					hi = int(piece[0])
+			else:
+				wi = int(piece[0])
+				hi = int(piece[1])
 			xi = int(piece[2])
 			yi = int(piece[3])
 			
@@ -54,3 +62,4 @@ def main():
 	
 if __name__ == '__main__':
 	main()
+	
